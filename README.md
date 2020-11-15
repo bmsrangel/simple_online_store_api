@@ -1,4 +1,6 @@
-# notes_api
+# Simple Online Store API
+
+To run the app, you need to configure a Hasura GraphQL instance and set URL and password in the `.env` file. Also, it's necessary to have Dart SDK installed and the Aqueduct. This project uses Aqueduct 4.0.0-b1.
 
 ## Running the Application Locally
 
