@@ -1,0 +1,1 @@
+class RestException implements Exception {}
