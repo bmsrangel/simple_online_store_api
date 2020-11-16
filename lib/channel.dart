@@ -18,6 +18,8 @@ class SimpleOnlineStoreApiChannel extends ApplicationChannel {
   Controller get entryPoint {
     final router = Router();
 
+    router.route("/images/*").link(() => FileController("public/"));
+
     RoutersConfigure(router).configure();
 
     return router;
