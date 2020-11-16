@@ -2,7 +2,7 @@ import 'package:aqueduct/aqueduct.dart';
 
 class RegisterRequest extends Serializable {
   String name;
-  String username;
+  String birthDate;
   String email;
   String password;
 
@@ -10,7 +10,7 @@ class RegisterRequest extends Serializable {
   Map<String, dynamic> asMap() {
     return {
       "name": name,
-      "username": username,
+      "birthDate": birthDate,
       "email": email,
       "password": password,
     };
@@ -19,7 +19,7 @@ class RegisterRequest extends Serializable {
   @override
   void readFromMap(Map<String, dynamic> object) {
     name = object["name"] as String;
-    username = object["username"] as String;
+    birthDate = object["birthDate"] as String;
     email = object["email"] as String;
     password = object["password"] as String;
   }

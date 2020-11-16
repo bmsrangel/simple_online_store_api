@@ -2,19 +2,19 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_entity.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class UserEntity {
   UserEntity({
     this.id,
     this.name,
-    this.username,
     this.email,
+    this.birthDate,
   });
 
   final String id;
   final String name;
-  final String username;
   final String email;
+  final String birthDate;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) =>
       _$UserEntityFromJson(json);

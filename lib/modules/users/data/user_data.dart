@@ -23,27 +23,24 @@ class UserRepository implements IUserRepository {
     final conn = _database.conn;
     try {
       const String query = """
-        mutation registerUser(\$name: String!, \$email: String!, \$username: String!, \$password: String!) {
-          insert_users(objects: {name: \$name, email: \$email, username: \$username, password: \$password}) {
-            returning {
-              id
-              name
-              username
-              email
-            }
+        mutation registerUser(\$name: String!, \$email: String!, \$password: String!, \$birth_date: String!) {
+          insert_users_one(object: {name: \$name, email: \$email, password: \$password, birth_date: \$birth_date}) {
+            id
+            email
+            name
+            birth_date
           }
         }
-
       """;
       final response = await conn.mutation(query, variables: {
         "name": registerUserInputModel.name,
-        "username": registerUserInputModel.username,
         "email": registerUserInputModel.email,
         "password":
             CryptHelper.generateSHA256Hash(registerUserInputModel.password),
+        "birth_date": registerUserInputModel.birthDate,
       });
-      return UserEntity.fromJson(response["data"]["insert_users"]["returning"]
-          [0] as Map<String, dynamic>);
+      return UserEntity.fromJson(
+          response["data"]["insert_users_one"] as Map<String, dynamic>);
     } on HasuraRequestError catch (e) {
       print(e.exception);
       print(e.message);
@@ -58,19 +55,18 @@ class UserRepository implements IUserRepository {
   Future<UserEntity> login(LoginUserInputModel loginUserInputModel) async {
     final conn = _database.conn;
     const String query = """
-      query getUser(\$username: String!, \$password: String!) {
-        users(where: {username: {_eq: \$username}, password: {_eq: \$password}}) {
+      query login(\$email: String!, \$password: String!) {
+        users(where: {email: {_eq: \$email}, password: {_eq: \$password}}) {
           id
           name
           email
-          username
+          birth_date
         }
       }
-
     """;
     try {
       final response = await conn.query(query, variables: {
-        "username": loginUserInputModel.username,
+        "email": loginUserInputModel.email,
         "password":
             CryptHelper.generateSHA256Hash(loginUserInputModel.password),
       });

@@ -1,20 +1,20 @@
 import 'package:aqueduct/aqueduct.dart';
 
 class LoginRequest extends Serializable {
-  String username;
+  String email;
   String password;
 
   @override
   Map<String, dynamic> asMap() {
     return {
-      "username": username,
+      "email": email,
       "password": password,
     };
   }
 
   @override
   void readFromMap(Map<String, dynamic> object) {
-    username = object["username"] as String;
+    email = object["email"] as String;
     password = object["password"] as String;
   }
 }

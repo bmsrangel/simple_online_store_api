@@ -29,9 +29,9 @@ class RegisterController extends ResourceController {
 
 RegisterUserInputModel mapper(RegisterRequest registerRequest) {
   return RegisterUserInputModel(
-    email: registerRequest.email,
-    username: registerRequest.username,
     name: registerRequest.name,
+    birthDate: registerRequest.birthDate,
+    email: registerRequest.email,
     password: registerRequest.password,
   );
 }

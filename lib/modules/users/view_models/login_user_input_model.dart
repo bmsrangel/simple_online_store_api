@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class LoginUserInputModel {
-  LoginUserInputModel(this.username, this.password);
-  final String username;
+  LoginUserInputModel(this.email, this.password);
+  final String email;
   final String password;
 
   Map<String, dynamic> toMap() {
     return {
-      'username': username,
+      'email': email,
       'password': password,
     };
   }
@@ -18,7 +18,7 @@ class LoginUserInputModel {
     }
 
     return LoginUserInputModel(
-      map['username'] as String,
+      map['email'] as String,
       map['password'] as String,
     );
   }

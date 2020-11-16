@@ -21,9 +21,9 @@ class LoginController extends ResourceController {
     try {
       final UserEntity user = await _service.login(mapper(loginRequest));
       final String accessToken =
-          JwtHelper.generateAccessToken(user.id, user.username);
+          JwtHelper.generateAccessToken(user.id, user.birthDate);
       final String refreshToken =
-          JwtHelper.generateRefreshToken(user.id, user.username);
+          JwtHelper.generateRefreshToken(user.id, user.birthDate);
       await _tokenRepository.storeAccessRefreshToken(
           user.id, accessToken, refreshToken);
       return Response.ok({
@@ -40,6 +40,6 @@ class LoginController extends ResourceController {
   }
 
   LoginUserInputModel mapper(LoginRequest loginRequest) {
-    return LoginUserInputModel(loginRequest.username, loginRequest.password);
+    return LoginUserInputModel(loginRequest.email, loginRequest.password);
   }
 }
