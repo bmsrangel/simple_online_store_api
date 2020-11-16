@@ -1,9 +1,10 @@
 import 'package:hasura_connect/hasura_connect.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../database/i_database.dart';
-import '../../exceptions/database_exception.dart';
-import '../../exceptions/rest_exception.dart';
+import '../../../app/database/i_database.dart';
+import '../../../app/exceptions/database_exception.dart';
+import '../../../app/exceptions/refresh_token_not_found_exception.dart';
+import '../../../app/exceptions/rest_exception.dart';
 import 'i_token_repository.dart';
 
 @Injectable(as: ITokenRepository)
@@ -76,6 +77,55 @@ class TokenRepository implements ITokenRepository {
       await conn.mutation(query, variables: {
         "accessToken": accessToken,
         "refreshToken": refreshToken,
+        "userId": userId,
+      });
+    } on HasuraRequestError catch (e) {
+      throw DatabaseException(e.message);
+    } catch (e) {
+      print(e);
+      throw RestException();
+    }
+  }
+
+  @override
+  Future<String> getRefreshToken(String userId) async {
+    try {
+      final HasuraConnect conn = _database.conn;
+      const String query = """
+        query getRefreshToken(\$userId: uuid!) {
+          tokens(where: {users_id: {_eq: \$userId}}) {
+            refresh_token
+          }
+        }
+      """;
+      final response = await conn.query(query);
+      final List tokenMapList = response["data"]["tokens"] as List;
+      if (tokenMapList.isEmpty) {
+        throw RefreshTokenNotFoundException();
+      } else {
+        return tokenMapList.first["refresh_token"] as String;
+      }
+    } on HasuraRequestError catch (e) {
+      throw DatabaseException(e.message);
+    } catch (e) {
+      print(e);
+      throw RestException();
+    }
+  }
+
+  @override
+  Future<void> updateAccessToken(String accessToken, String userId) async {
+    try {
+      final HasuraConnect conn = _database.conn;
+      const String query = """
+        mutation updateAccessToken(\$access_token: String!, \$userId: uuid!) {
+          update_tokens(where: {users_id: {_eq: \$userId}}, _set: {access_token: \$access_token}) {
+            affected_rows
+          }
+        }
+      """;
+      await conn.mutation(query, variables: {
+        "access_token": accessToken,
         "userId": userId,
       });
     } on HasuraRequestError catch (e) {
