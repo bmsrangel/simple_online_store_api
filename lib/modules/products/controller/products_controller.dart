@@ -6,7 +6,7 @@ import '../../../app/exceptions/rest_exception.dart';
 import '../../../simple_online_store_api.dart';
 import '../service/i_products_service.dart';
 
-@Injectable()
+@LazySingleton()
 class ProductsController extends ResourceController {
   ProductsController(this._service);
 

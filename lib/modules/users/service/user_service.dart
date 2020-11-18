@@ -6,7 +6,7 @@ import '../view_models/login_user_input_model.dart';
 import '../view_models/register_user_input_model.dart';
 import 'i_user_service.dart';
 
-@Injectable(as: IUserService)
+@LazySingleton(as: IUserService)
 class UserService implements IUserService {
   UserService(this._repository);
 

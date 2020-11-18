@@ -1,13 +1,14 @@
 import 'package:hasura_connect/hasura_connect.dart';
 import 'package:injectable/injectable.dart';
-import 'package:simple_online_store_api/app/database/hasura_database.dart';
-import 'package:simple_online_store_api/app/entities/product_entity.dart';
-import 'package:simple_online_store_api/app/exceptions/database_exception.dart';
-import 'package:simple_online_store_api/app/exceptions/products_not_created_exception.dart';
-import 'package:simple_online_store_api/app/exceptions/rest_exception.dart';
-import 'package:simple_online_store_api/modules/products/data/i_products_repository.dart';
 
-@Injectable(as: IProductsRepository)
+import '../../../app/database/hasura_database.dart';
+import '../../../app/entities/product_entity.dart';
+import '../../../app/exceptions/database_exception.dart';
+import '../../../app/exceptions/products_not_created_exception.dart';
+import '../../../app/exceptions/rest_exception.dart';
+import 'i_products_repository.dart';
+
+@LazySingleton(as: IProductsRepository)
 class ProductsRepository implements IProductsRepository {
   ProductsRepository(this._database);
 

@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import '../../simple_online_store_api.dart';
 import '../helpers/jwt_helper.dart';
 
-@Injectable()
+@LazySingleton()
 class AuthorizationMiddleware extends Controller {
   @override
   FutureOr<RequestOrResponse> handle(Request request) async {

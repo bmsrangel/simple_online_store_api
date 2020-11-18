@@ -6,7 +6,7 @@ import '../service/i_user_service.dart';
 import '../view_models/register_user_input_model.dart';
 import 'models/register_request.dart';
 
-@Injectable()
+@LazySingleton()
 class RegisterController extends ResourceController {
   RegisterController(this._service);
 

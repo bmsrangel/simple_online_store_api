@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import '../data/i_token_repository.dart';
 import 'i_tokens_service.dart';
 
-@Injectable(as: ITokensService)
+@LazySingleton(as: ITokensService)
 class TokensService implements ITokensService {
   TokensService(this._repository);
 

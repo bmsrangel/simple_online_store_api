@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import 'i_database.dart';
 
-@Injectable(as: IDatabase)
+@LazySingleton(as: IDatabase)
 class HasuraDatabase implements IDatabase {
   HasuraDatabase() {
     load();

@@ -22,6 +22,7 @@ import '../../modules/products/data/products_repository.dart';
 import '../../modules/products/service/products_service.dart';
 import '../../modules/users/controller/register_controller.dart';
 import '../../modules/tokens/data/token_repository.dart';
+import '../../modules/tokens/controller/tokens_controller.dart';
 import '../../modules/tokens/service/tokens_service.dart';
 import '../../modules/users/data/user_data.dart';
 import '../../modules/users/service/user_service.dart';
@@ -35,20 +36,24 @@ GetIt $initGetIt(
   EnvironmentFilter environmentFilter,
 }) {
   final gh = GetItHelper(get, environment, environmentFilter);
-  gh.factory<AuthorizationMiddleware>(() => AuthorizationMiddleware());
-  gh.factory<IDatabase>(() => HasuraDatabase());
-  gh.factory<IProductsRepository>(
+  gh.lazySingleton<AuthorizationMiddleware>(() => AuthorizationMiddleware());
+  gh.lazySingleton<IDatabase>(() => HasuraDatabase());
+  gh.lazySingleton<IProductsRepository>(
       () => ProductsRepository(get<HasuraDatabase>()));
-  gh.factory<IProductsService>(
+  gh.lazySingleton<IProductsService>(
       () => ProductsService(get<IProductsRepository>()));
-  gh.factory<ITokenRepository>(() => TokenRepository(get<IDatabase>()));
-  gh.factory<ITokensService>(() => TokensService(get<ITokenRepository>()));
-  gh.factory<IUserRepository>(() => UserRepository(get<IDatabase>()));
-  gh.factory<IUserService>(() => UserService(get<IUserRepository>()));
-  gh.factory<LoginController>(
+  gh.lazySingleton<ITokenRepository>(() => TokenRepository(get<IDatabase>()));
+  gh.lazySingleton<ITokensService>(
+      () => TokensService(get<ITokenRepository>()));
+  gh.lazySingleton<IUserRepository>(() => UserRepository(get<IDatabase>()));
+  gh.lazySingleton<IUserService>(() => UserService(get<IUserRepository>()));
+  gh.lazySingleton<LoginController>(
       () => LoginController(get<IUserService>(), get<ITokensService>()));
-  gh.factory<ProductsController>(
+  gh.lazySingleton<ProductsController>(
       () => ProductsController(get<IProductsService>()));
-  gh.factory<RegisterController>(() => RegisterController(get<IUserService>()));
+  gh.lazySingleton<RegisterController>(
+      () => RegisterController(get<IUserService>()));
+  gh.lazySingleton<TokensController>(
+      () => TokensController(get<ITokenRepository>()));
   return get;
 }

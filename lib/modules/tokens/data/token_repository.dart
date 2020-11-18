@@ -7,7 +7,7 @@ import '../../../app/exceptions/refresh_token_not_found_exception.dart';
 import '../../../app/exceptions/rest_exception.dart';
 import 'i_token_repository.dart';
 
-@Injectable(as: ITokenRepository)
+@LazySingleton(as: ITokenRepository)
 class TokenRepository implements ITokenRepository {
   TokenRepository(this._database);
 
@@ -98,7 +98,9 @@ class TokenRepository implements ITokenRepository {
           }
         }
       """;
-      final response = await conn.query(query);
+      final response = await conn.query(query, variables: {
+        "userId": userId,
+      });
       final List tokenMapList = response["data"]["tokens"] as List;
       if (tokenMapList.isEmpty) {
         throw RefreshTokenNotFoundException();
@@ -133,6 +135,29 @@ class TokenRepository implements ITokenRepository {
     } catch (e) {
       print(e);
       throw RestException();
+    }
+  }
+
+  @override
+  Future<String> getLastAccessToken(String userId) async {
+    try {
+      final conn = _database.conn;
+      const String query = """
+        query getLastAccessToken(\$userId: uuid) {
+          tokens(where: {users_id: {_eq: \$userId}}) {
+            access_token
+          }
+        }
+      """;
+      final response = await conn.query(query);
+      final List tokensList = response["data"]["tokens"] as List;
+      if (tokensList.isNotEmpty) {
+        return tokensList.first["access_token"] as String;
+      } else {
+        throw RefreshTokenNotFoundException();
+      }
+    } on HasuraRequestError catch (e) {
+      throw DatabaseException(e.message);
     }
   }
 }

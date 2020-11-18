@@ -11,7 +11,7 @@ import '../view_models/login_user_input_model.dart';
 import '../view_models/register_user_input_model.dart';
 import 'i_user_repository.dart';
 
-@Injectable(as: IUserRepository)
+@LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {
   UserRepository(this._database);
 

@@ -44,13 +44,17 @@ class JwtHelper {
     }
   }
 
-  static String checkRefreshToken(String refreshToken) {
+  static bool isRefreshTokenValid(String refreshToken) {
     load();
-    final String refreshTokenSecret = env["REFRESH_TOKEN_SECRET"];
-    final JwtClaim refreshTokenClaim =
-        verifyJwtHS256Signature(refreshToken, refreshTokenSecret);
-    refreshTokenClaim.validate();
-    return null;
+    try {
+      final String refreshTokenSecret = env["REFRESH_TOKEN_SECRET"];
+      final JwtClaim refreshTokenClaim =
+          verifyJwtHS256Signature(refreshToken, refreshTokenSecret);
+      refreshTokenClaim.validate();
+      return true;
+    } on JwtException {
+      return false;
+    }
   }
 
   static String refreshAccessToken(String refreshToken) {

@@ -9,7 +9,7 @@ import '../service/i_user_service.dart';
 import '../view_models/login_user_input_model.dart';
 import 'models/login_request.dart';
 
-@Injectable()
+@LazySingleton()
 class LoginController extends ResourceController {
   LoginController(this._service, this._tokenRepository);
 
