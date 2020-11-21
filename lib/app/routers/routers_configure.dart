@@ -1,5 +1,6 @@
 import 'package:aqueduct/aqueduct.dart';
 
+import '../../modules/payment_types/payment_types_routers.dart';
 import '../../modules/products/products_routers.dart';
 import '../../modules/tokens/tokens_router.dart';
 import '../../modules/users/users_routers.dart';
@@ -13,6 +14,7 @@ class RoutersConfigure {
     UsersRouters(),
     ProductsRouters(),
     TokensRouter(),
+    PaymentTypesRouters(),
   ];
 
   void configure() => routers.forEach((route) => route.configure(_router));

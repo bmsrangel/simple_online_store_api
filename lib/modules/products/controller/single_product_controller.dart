@@ -20,7 +20,7 @@ class SingleProductController extends ResourceController {
       if (product != null) {
         return Response.ok(product.toJson());
       } else {
-        return Response.notFound(body: {'message': 'Produto não encontrado'});
+        return Response.notFound(body: {'message': 'Product not found'});
       }
     } on DatabaseException catch (e) {
       throw Response.serverError(body: {

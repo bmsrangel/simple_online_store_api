@@ -22,15 +22,23 @@ ProductEntity _$ProductEntityFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$ProductEntityToJson(ProductEntity instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'short_description': instance.shortDescription,
-      'long_description': instance.longDescription,
-      'price': instance.price,
-      'stock': instance.stock,
-      'thumbnail': instance.thumbnail,
-      'discount': instance.discount,
-      'category': instance.category,
-    };
+Map<String, dynamic> _$ProductEntityToJson(ProductEntity instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('name', instance.name);
+  writeNotNull('short_description', instance.shortDescription);
+  writeNotNull('long_description', instance.longDescription);
+  writeNotNull('price', instance.price);
+  writeNotNull('stock', instance.stock);
+  writeNotNull('thumbnail', instance.thumbnail);
+  writeNotNull('discount', instance.discount);
+  writeNotNull('category', instance.category);
+  return val;
+}

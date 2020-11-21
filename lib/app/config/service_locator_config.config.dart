@@ -11,6 +11,8 @@ import 'application_configuration.dart';
 import '../middlewares/authorization_middleware.dart';
 import '../database/hasura_database.dart';
 import '../database/i_hasura_database.dart';
+import '../../modules/payment_types/data/i_payment_types_repository.dart';
+import '../../modules/payment_types/service/i_payment_types_service.dart';
 import '../../modules/products/data/i_products_repository.dart';
 import '../../modules/products/service/i_products_service.dart';
 import '../database/i_redis_database.dart';
@@ -19,6 +21,9 @@ import '../../modules/tokens/service/i_tokens_service.dart';
 import '../../modules/users/data/i_user_repository.dart';
 import '../../modules/users/service/i_user_service.dart';
 import '../../modules/users/controller/login_controller.dart';
+import '../../modules/payment_types/controller/payment_types_controller.dart';
+import '../../modules/payment_types/data/payment_types_repository.dart';
+import '../../modules/payment_types/service/payment_types_service.dart';
 import '../../modules/products/controller/products_controller.dart';
 import '../../modules/products/data/products_repository.dart';
 import '../../modules/products/service/products_service.dart';
@@ -43,6 +48,10 @@ GetIt $initGetIt(
   final gh = GetItHelper(get, environment, environmentFilter);
   gh.lazySingleton<AuthorizationMiddleware>(() => AuthorizationMiddleware());
   gh.lazySingleton<IHasuraDatabase>(() => HasuraDatabase());
+  gh.lazySingleton<IPaymentTypesRepository>(
+      () => PaymentTypesRepository(get<HasuraDatabase>()));
+  gh.lazySingleton<IPaymentTypesService>(
+      () => PaymentTypesService(get<IPaymentTypesRepository>()));
   gh.lazySingleton<IProductsRepository>(
       () => ProductsRepository(get<HasuraDatabase>()));
   gh.lazySingleton<IProductsService>(
@@ -58,6 +67,8 @@ GetIt $initGetIt(
   gh.lazySingleton<IUserService>(() => UserService(get<IUserRepository>()));
   gh.lazySingleton<LoginController>(
       () => LoginController(get<IUserService>(), get<ITokensService>()));
+  gh.lazySingleton<PaymentTypesController>(
+      () => PaymentTypesController(get<IPaymentTypesService>()));
   gh.lazySingleton<ProductsController>(
       () => ProductsController(get<IProductsService>()));
   gh.lazySingleton<RegisterController>(

@@ -4,7 +4,7 @@ import 'category_entity.dart';
 
 part 'product_entity.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class ProductEntity {
   ProductEntity(this.id, this.name, this.shortDescription, this.longDescription,
       this.price, this.stock, this.thumbnail, this.discount, this.category);

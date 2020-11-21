@@ -20,21 +20,16 @@ class ProductsRepository implements IProductsRepository {
       final HasuraConnect conn = _database.conn;
       const String query = """
         query getAllProducts(\$offset: Int!) {
-          products(limit: 10, offset: \$offset) {
+          products(limit: 10, offset: \$offset, where: {stock: {_gt: 0}}) {
             id
             name
             short_description
-            long_description
             price
-            stock
             thumbnail
             discount
-            category {
-              id
-              name
-            }
           }
         }
+
       """;
       final response = await conn.query(query, variables: {
         "offset": page * 10,
