@@ -1,5 +1,7 @@
 import 'package:hasura_connect/hasura_connect.dart';
 import 'package:injectable/injectable.dart';
+import 'package:simple_online_store_api/app/entities/address_entity.dart';
+import 'package:simple_online_store_api/modules/users/view_models/address_input_model.dart';
 
 import '../../../app/database/i_hasura_database.dart';
 import '../../../app/entities/user_entity.dart';
@@ -76,6 +78,75 @@ class UserRepository implements IUserRepository {
       } else {
         return UserEntity.fromJson(usersData.first as Map<String, dynamic>);
       }
+    } on HasuraRequestError catch (e) {
+      throw DatabaseException(e.message);
+    } catch (e) {
+      print(e);
+      throw RestException();
+    }
+  }
+
+  @override
+  Future<List<AddressEntity>> getUserAddressesByUserId(String userId) async {
+    try {
+      final conn = _database.conn;
+      const String query = '''
+      query getUserAddresses(\$userId: uuid!) {
+        addresses(where: {users_id: {_eq: \$userId}}) {
+          id
+          street
+          number
+          complement
+          zip_code
+          city
+          state
+          country
+        }
+      }
+    ''';
+      final response = await conn.query(query, variables: {
+        "userId": userId,
+      });
+      final List addressesMapList = response['data']['addresses'] as List;
+      if (addressesMapList.isEmpty) {
+        return [];
+      } else {
+        return addressesMapList
+            .map((addressMap) =>
+                AddressEntity.fromJson(addressMap as Map<String, dynamic>))
+            .toList();
+      }
+    } on HasuraRequestError catch (e) {
+      throw DatabaseException(e.message);
+    } catch (e) {
+      print(e);
+      throw RestException();
+    }
+  }
+
+  @override
+  Future<String> addAddress(
+      AddressInputModel addressInputModel, String userId) async {
+    try {
+      final conn = _database.conn;
+      const String query = '''
+        mutation addAddress(\$street: String!, \$number: String!, \$complement: String, \$city: String!, \$state: String!, \$country: String!, \$zip_code: String!, \$userId: uuid!) {
+          insert_addresses_one(object: {street: \$street, number: \$number, complement: \$complement, city: \$city, state: \$state, country: \$country, zip_code: \$zip_code, users_id: \$userId}) {
+            id
+          }
+        }
+      ''';
+      final response = await conn.mutation(query, variables: {
+        "street": addressInputModel.street,
+        "number": addressInputModel.number,
+        "complement": addressInputModel.complement,
+        "city": addressInputModel.city,
+        "state": addressInputModel.state,
+        "country": addressInputModel.country,
+        "zip_code": addressInputModel.zipCode,
+        "userId": userId,
+      });
+      return response['data']['insert_addresses_one']['id'] as String;
     } on HasuraRequestError catch (e) {
       throw DatabaseException(e.message);
     } catch (e) {

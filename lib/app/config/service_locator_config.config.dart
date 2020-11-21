@@ -7,6 +7,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../modules/users/controller/addresses_controller.dart';
 import 'application_configuration.dart';
 import '../middlewares/authorization_middleware.dart';
 import '../database/hasura_database.dart';
@@ -34,7 +35,7 @@ import '../../modules/tokens/data/token_repository.dart';
 import '../../modules/tokens/data/token_repository_redis.dart';
 import '../../modules/tokens/controller/tokens_controller.dart';
 import '../../modules/tokens/service/tokens_service.dart';
-import '../../modules/users/data/user_data.dart';
+import '../../modules/users/data/user_repository.dart';
 import '../../modules/users/service/user_service.dart';
 
 /// adds generated dependencies
@@ -79,5 +80,7 @@ GetIt $initGetIt(
       () => TokenRepository(get<IHasuraDatabase>()));
   gh.lazySingleton<TokensController>(
       () => TokensController(get<ITokenRepository>()));
+  gh.lazySingleton<AddressesController>(
+      () => AddressesController(get<IUserService>()));
   return get;
 }
