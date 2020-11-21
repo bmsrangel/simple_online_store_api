@@ -1,7 +1,7 @@
 import 'package:hasura_connect/hasura_connect.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../app/database/i_database.dart';
+import '../../../app/database/i_hasura_database.dart';
 import '../../../app/entities/user_entity.dart';
 import '../../../app/exceptions/database_exception.dart';
 import '../../../app/exceptions/rest_exception.dart';
@@ -15,7 +15,7 @@ import 'i_user_repository.dart';
 class UserRepository implements IUserRepository {
   UserRepository(this._database);
 
-  final IDatabase _database;
+  final IHasuraDatabase _database;
 
   @override
   Future<UserEntity> registerUser(

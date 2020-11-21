@@ -1,20 +1,20 @@
 import 'package:hasura_connect/hasura_connect.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../app/database/i_database.dart';
+import '../../../app/database/i_hasura_database.dart';
 import '../../../app/exceptions/database_exception.dart';
 import '../../../app/exceptions/refresh_token_not_found_exception.dart';
 import '../../../app/exceptions/rest_exception.dart';
 import 'i_token_repository.dart';
 
-@LazySingleton(as: ITokenRepository)
+@LazySingleton()
 class TokenRepository implements ITokenRepository {
   TokenRepository(this._database);
 
-  final IDatabase _database;
+  final IHasuraDatabase _database;
 
   @override
-  Future<void> storeAccessToken(String userId, String token) async {
+  Future<void> storeAccessToken(String userId, String accessToken) async {
     final conn = _database.conn;
     const String query = """
       mutation insertAccessToken(\$accessToken: String!, \$userId: uuid!) {
@@ -25,30 +25,7 @@ class TokenRepository implements ITokenRepository {
     """;
     try {
       await conn.mutation(query, variables: {
-        "accessToken": token,
-        "userId": userId,
-      });
-    } on HasuraRequestError catch (e) {
-      throw DatabaseException(e.message);
-    } catch (e) {
-      print(e);
-      throw RestException();
-    }
-  }
-
-  @override
-  Future<void> storeRefreshToken(String userId, String token) async {
-    final conn = _database.conn;
-    const String query = """
-      mutation insertRefreshToken(\$refreshToken: String!, \$userId: uuid!) {
-        insert_tokens_one(object: {refresh_token: \$refreshToken, users_id: \$userId}, on_conflict: {constraint: tokens_users_id_key, update_columns: refresh_token}) {
-          refresh_token
-        }
-      }
-    """;
-    try {
-      await conn.mutation(query, variables: {
-        "refreshToken": token,
+        "accessToken": accessToken,
         "userId": userId,
       });
     } on HasuraRequestError catch (e) {

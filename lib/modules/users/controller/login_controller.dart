@@ -20,12 +20,11 @@ class LoginController extends ResourceController {
   Future<Response> login(@Bind.body() LoginRequest loginRequest) async {
     try {
       final UserEntity user = await _service.login(mapper(loginRequest));
-      final String accessToken =
-          JwtHelper.generateAccessToken(user.id, user.birthDate);
-      final String refreshToken =
-          JwtHelper.generateRefreshToken(user.id, user.birthDate);
+      final String accessToken = JwtHelper.generateAccessToken(user.id);
+      final String refreshToken = JwtHelper.generateRefreshToken(user.id);
       await _tokenRepository.storeAccessRefreshToken(
           user.id, accessToken, refreshToken);
+      await _tokenRepository.getLastAccessToken(user.id);
       return Response.ok({
         "user": user.toJson(),
         "token": accessToken,
@@ -35,7 +34,8 @@ class LoginController extends ResourceController {
       return Response.notFound(body: {
         "message": "Usuário não encontrado",
       });
-    } catch (_) {
+    } catch (e) {
+      print(e);
       return Response.serverError();
     }
   }

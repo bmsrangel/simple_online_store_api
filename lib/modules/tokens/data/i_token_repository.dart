@@ -1,6 +1,5 @@
 abstract class ITokenRepository {
-  Future<void> storeAccessToken(String userId, String token);
-  Future<void> storeRefreshToken(String userId, String token);
+  Future<void> storeAccessToken(String userId, String accessToken);
   Future<void> storeAccessRefreshToken(
       String userId, String accessToken, String refreshToken);
   Future<String> getLastAccessToken(String userId);

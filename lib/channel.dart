@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 
+import 'app/config/application_configuration.dart';
 import 'app/config/service_locator_config.dart';
 import 'app/database/hasura_database.dart';
 import 'app/routers/routers_configure.dart';
@@ -11,6 +12,8 @@ class SimpleOnlineStoreApiChannel extends ApplicationChannel {
     logger.onRecord.listen(
         (rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
     GetIt.instance.registerLazySingleton(() => HasuraDatabase());
+    GetIt.instance.registerLazySingleton(
+        () => ApplicationConfiguration(options.configurationFilePath));
     configureDependencies();
   }
 

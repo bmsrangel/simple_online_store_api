@@ -17,7 +17,7 @@ class TokensController extends ResourceController {
     if (userId != null) {
       final String lastAccessToken =
           await _tokenRepository.getLastAccessToken(userId);
-      if (accessToken != lastAccessToken) {
+      if (lastAccessToken != null && accessToken != lastAccessToken) {
         return Response.unauthorized();
       } else {
         final String refreshToken =

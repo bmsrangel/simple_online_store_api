@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:simple_online_store_api/app/entities/category_entity.dart';
+
+import 'category_entity.dart';
 
 part 'product_entity.g.dart';
 

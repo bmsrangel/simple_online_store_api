@@ -27,12 +27,12 @@ class TokensService implements ITokensService {
   }
 
   @override
-  Future<void> storeRefreshToken(String userId, String token) {
-    return _repository.storeRefreshToken(userId, token);
+  Future<void> updateAccessToken(String accessToken, String userId) {
+    return _repository.updateAccessToken(accessToken, userId);
   }
 
   @override
-  Future<void> updateAccessToken(String accessToken, String userId) {
-    return _repository.updateAccessToken(accessToken, userId);
+  Future<String> getLastAccessToken(String userId) {
+    return _repository.getLastAccessToken(userId);
   }
 }

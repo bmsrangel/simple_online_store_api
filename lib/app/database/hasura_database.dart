@@ -2,10 +2,10 @@ import 'package:dotenv/dotenv.dart' show load, env;
 import 'package:hasura_connect/hasura_connect.dart';
 import 'package:injectable/injectable.dart';
 
-import 'i_database.dart';
+import 'i_hasura_database.dart';
 
-@LazySingleton(as: IDatabase)
-class HasuraDatabase implements IDatabase {
+@LazySingleton(as: IHasuraDatabase)
+class HasuraDatabase implements IHasuraDatabase {
   HasuraDatabase() {
     load();
     _url = env["HASURA_URL"];
