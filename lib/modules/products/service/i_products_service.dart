@@ -1,5 +1,5 @@
 import '../../../app/entities/product_entity.dart';
 
 abstract class IProductsService {
-  Future<List<ProductEntity>> getAllProducts();
+  Future<List<ProductEntity>> getAllProducts(int page);
 }

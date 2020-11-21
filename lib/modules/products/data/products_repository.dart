@@ -15,12 +15,12 @@ class ProductsRepository implements IProductsRepository {
   final HasuraDatabase _database;
 
   @override
-  Future<List<ProductEntity>> getAllProducts() async {
+  Future<List<ProductEntity>> getAllProducts(int page) async {
     try {
       final HasuraConnect conn = _database.conn;
       const String query = """
-        query getAllProducts {
-          products {
+        query getAllProducts(\$offset: Int!) {
+          products(limit: 10, offset: \$offset) {
             id
             name
             short_description
@@ -36,11 +36,13 @@ class ProductsRepository implements IProductsRepository {
           }
         }
       """;
-      final response = await conn.query(query);
+      final response = await conn.query(query, variables: {
+        "offset": page * 10,
+      });
       final List productsMapList = response["data"]["products"] as List;
       if (productsMapList == null) {
         throw RestException();
-      } else if (productsMapList.isEmpty) {
+      } else if (page == 0 && productsMapList.isEmpty) {
         throw ProductsNotCreatedException();
       } else {
         return productsMapList

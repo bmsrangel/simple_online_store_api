@@ -13,9 +13,9 @@ class ProductsController extends ResourceController {
   final IProductsService _service;
 
   @Operation.get()
-  Future<Response> getAllProducts() async {
+  Future<Response> getAllProducts({@Bind.query("page") int page = 0}) async {
     try {
-      final List<ProductEntity> products = await _service.getAllProducts();
+      final List<ProductEntity> products = await _service.getAllProducts(page);
       return Response.ok({
         "products": products.map((product) => product.toJson()).toList(),
       });
