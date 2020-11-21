@@ -24,6 +24,7 @@ import '../../modules/products/data/products_repository.dart';
 import '../../modules/products/service/products_service.dart';
 import '../database/redis_database.dart';
 import '../../modules/users/controller/register_controller.dart';
+import '../../modules/products/controller/single_product_controller.dart';
 import '../../modules/tokens/data/token_repository.dart';
 import '../../modules/tokens/data/token_repository_redis.dart';
 import '../../modules/tokens/controller/tokens_controller.dart';
@@ -61,6 +62,8 @@ GetIt $initGetIt(
       () => ProductsController(get<IProductsService>()));
   gh.lazySingleton<RegisterController>(
       () => RegisterController(get<IUserService>()));
+  gh.lazySingleton<SingleProductController>(
+      () => SingleProductController(get<IProductsService>()));
   gh.lazySingleton<TokenRepository>(
       () => TokenRepository(get<IHasuraDatabase>()));
   gh.lazySingleton<TokensController>(

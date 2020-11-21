@@ -57,4 +57,43 @@ class ProductsRepository implements IProductsRepository {
       throw RestException();
     }
   }
+
+  @override
+  Future<ProductEntity> getProductById(String productId) async {
+    try {
+      final conn = _database.conn;
+      const String query = '''
+        query getProductById(\$productId: uuid!) {
+          products(where: {id: {_eq: \$productId}}) {
+            id
+            name
+            short_description
+            long_description
+            price
+            stock
+            thumbnail
+            discount
+            category {
+              id
+              name
+            }
+          }
+        }
+      ''';
+      final response = await conn.query(query, variables: {
+        "productId": productId,
+      });
+      final List result = response["data"]["products"] as List;
+      if (result.length == 1) {
+        return ProductEntity.fromJson(result.first as Map<String, dynamic>);
+      } else {
+        return null;
+      }
+    } on HasuraRequestError catch (e) {
+      throw DatabaseException(e.message);
+    } catch (e) {
+      print(e);
+      throw RestException();
+    }
+  }
 }

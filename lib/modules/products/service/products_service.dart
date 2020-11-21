@@ -14,4 +14,9 @@ class ProductsService implements IProductsService {
   Future<List<ProductEntity>> getAllProducts(int page) {
     return _repository.getAllProducts(page);
   }
+
+  @override
+  Future<ProductEntity> getProductById(String productId) {
+    return _repository.getProductById(productId);
+  }
 }
